@@ -22,7 +22,7 @@ resource "aws_s3_bucket" "aisk-artifact" {
 }
 
 resource "aws_codepipeline" "aisk-app" {
-  name     = "example"
+  name     = "aisk_app_codepipeline"
   role_arn = module.codepipeline_role.iam_role_arn
 
   stage {
