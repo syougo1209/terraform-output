@@ -1,12 +1,8 @@
-module "iam_policies" {
-  source = "./modules/iam/policies"
-}
-
 module "codebuild_role" {
   source = "./modules/iam"
   name = "codebuild"
   identifier = "codebuild.amazonaws.com"
-  policy = module.iam_policies.aws_iam_policy_document.codebuild
+  policy = module.iam_policies.codebuild_policy
 }
 
 resource "aws_codebuild_project" "aisk-app-build" {

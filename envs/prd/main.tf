@@ -11,5 +11,10 @@ terraform {
 
 provider "aws" {
   region  = "ap-northeast-1"
-  profile = "production"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+}
+module "prd" {
+  source = "../../"
+  github_token = var.github_token
 }

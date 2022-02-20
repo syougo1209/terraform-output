@@ -3,20 +3,27 @@ provider "github" {
 }
 
 module "codepipeline_role" {
-  source     = "./iam_role"
+  source     = "./modules/iam"
   name       = "codepipeline"
   identifier = "codepipeline.amazonaws.com"
-  policy     = data.aws_iam_policy_document.codepipeline.json
+  policy     = module.iam_policies.codepipeline_policy
 }
 
 resource "aws_s3_bucket" "aisk-artifact" {
   bucket = "aisk-artifact"
 
-  lifecycle_rule {
-    enabled = true
+  tags = {
+    Name = "aisk_artifact"
+  }
+}
+resource "aws_s3_bucket_lifecycle_configuration" "aisk-artifact" {
+  bucket = aws_s3_bucket.aisk-artifact.id
 
+  rule {
+    id = "180日間保存する"
+    status = "Enabled"
     expiration {
-      days = "180"
+      days = 180
     }
   }
 }
