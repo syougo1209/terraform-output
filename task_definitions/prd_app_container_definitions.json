@@ -1,0 +1,16 @@
+[
+  {
+    "name": "app-nginx",
+    "image": "${aws_ecs_task_definition.aisk-nginx.repository_url}",
+    "essential": true,
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ]
+  },
+  {
+
+  }
+]

@@ -1,3 +1,17 @@
+resource "aws_ecs_cluster" "aisk-prd" {
+  name = "aisk-prd"
+}
+
+resource "aws_ecs_task_definition" "aisk-prd-app" {
+  family                   = "aisk-prd-app"
+  cpu                      = "256"
+  memory                   = "512"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  container_definitions    = file("./task_definitions/prd_app_container_definitions.json")
+}
+
+//ECRの設定
 resource "aws_ecr_repository" "aisk-rails-api" {
   name = "rails-api"
 }
