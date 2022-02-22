@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "aisk-prd-app" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = file("./task_definitions/prd_app_container_definitions.json")
+  container_definitions    = file("${path.module}/prd_app_container_definitions.json")
 
   volume {
     name      = "sockets"

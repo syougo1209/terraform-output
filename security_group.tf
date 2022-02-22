@@ -23,7 +23,7 @@ module "http_redirect_sg" {
 }
 
 module "nginx_sg" {
-  source      = "./security_group"
+  source      = "./modules/security_group"
   name        = "nginx-sg"
   vpc_id      = aws_vpc.aisk_prd.id
   port        = 80
@@ -31,7 +31,7 @@ module "nginx_sg" {
 }
 
 module "mysql_sg" {
-  source      = "./security_group"
+  source      = "./modules/security_group"
   name        = "mysql-sg"
   vpc_id      = aws_vpc.aisk_prd.id
   port        = 3306
