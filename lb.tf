@@ -101,7 +101,7 @@ resource "aws_lb_target_group" "aisk-prd-app-ecs-group" {
   deregistration_delay = 300
 
   health_check {
-    path                = "/"
+    path                = "/posts"
     healthy_threshold   = 5
     unhealthy_threshold = 2
     timeout             = 5

@@ -1,6 +1,12 @@
 resource "aws_ecs_cluster" "aisk-prd" {
   name = "aisk-prd"
 }
+module "ecs_task_execution_role" {
+  source     = "./modules/iam"
+  name       = "ecs-task-execution"
+  identifier = "ecs-tasks.amazonaws.com"
+  policy     = module.iam_policies.ecs_task_execution_policy
+}
 
 resource "aws_ecs_task_definition" "aisk-prd-app" {
   family                   = "aisk-prd-app"
@@ -8,12 +14,8 @@ resource "aws_ecs_task_definition" "aisk-prd-app" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = file("${path.module}/task_definitions/prd_app_container_definitions.json")
-
-  volume {
-    name      = "sockets"
-    host_path = "/app/tmp/sockets"
-  }
+  container_definitions    = file("${path.module}/prd_app_container_definitions.json")
+  execution_role_arn = module.ecs_task_execution_role.iam_role_arn
 }
 
 resource "aws_ecs_service" "aisk-prd-app" {
@@ -37,7 +39,7 @@ resource "aws_ecs_service" "aisk-prd-app" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.aisk-prd-app-ecs-group.arn
-    container_name   = "aisk-prd-app"
+    container_name   = "app-nginx"
     container_port   = 80
   }
 

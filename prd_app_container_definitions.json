@@ -1,36 +1,45 @@
 [
   {
     "name": "app-nginx",
-    "image": "${aws_ecs_task_definition.aisk-nginx.repository_url}",
+    "image": "608138773257.dkr.ecr.ap-northeast-1.amazonaws.com/aisk-nginx:latest",
     "essential": true,
-    "mountPoints" : [
-      {
-         "containerPath" : "/app/tmp/sockets",
-         "sourceVolume" : "sockets"
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "nginx",
+        "awslogs-group": "/ecs/aisk"
       }
-    ],
+    },
     "portMappings": [
       {
         "protocol": "tcp",
         "containerPort": 80
       }
+    ],
+    "volumesFrom": [
+      {
+        "sourceContainer": "app-rails-api",
+        "readOnly": false
+      }
     ]
   },
   {
     "name": "app-rails-api",
-    "image": "${aws_ecs_task_definition.aisk-rails-api.repository_url}",
+    "image": "608138773257.dkr.ecr.ap-northeast-1.amazonaws.com/rails-api:latest",
     "essential": true,
-    "mountPoints" : [
-      {
-         "containerPath" : "/app/tmp/sockets",
-         "sourceVolume" : "sockets"
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "rails",
+        "awslogs-group": "/ecs/aisk"
       }
-    ],
+    },
     "portMappings": [
       {
         "protocol": "tcp",
-        "containerPort": 3000,
-        "hostPort": 0
+        "containerPort": 3000
       }
     ],
     "workingDirectory": "/app",
@@ -42,7 +51,7 @@
       },
       {
         "name": "DB_HOST",
-        "value": "${aws_db_instance.aisk-db.endpoint}"
+        "value": "aisk-db.cerpx1sxkwly.ap-northeast-1.rds.amazonaws.com"
       },
       {
         "name": "DB_DATABASE",
