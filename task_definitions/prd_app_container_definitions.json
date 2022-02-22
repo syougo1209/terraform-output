@@ -1,0 +1,69 @@
+[
+  {
+    "name": "app-nginx",
+    "image": "${aws_ecs_task_definition.aisk-nginx.repository_url}",
+    "essential": true,
+    "mountPoints" : [
+      {
+         "containerPath" : "/app/tmp/sockets",
+         "sourceVolume" : "sockets"
+      }
+    ],
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ]
+  },
+  {
+    "name": "app-rails-api",
+    "image": "${aws_ecs_task_definition.aisk-rails-api.repository_url}",
+    "essential": true,
+    "mountPoints" : [
+      {
+         "containerPath" : "/app/tmp/sockets",
+         "sourceVolume" : "sockets"
+      }
+    ],
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 3000,
+        "hostPort": 0
+      }
+    ],
+    "workingDirectory": "/app",
+    "command": ["bundle","exec","puma","-C","config/puma.rb"],
+    "environment": [
+      {
+        "name": "RAILS_ENV",
+        "value": "production"
+      },
+      {
+        "name": "DB_HOST",
+        "value": "${aws_db_instance.aisk-db.endpoint}"
+      },
+      {
+        "name": "DB_DATABASE",
+        "value": "aisk-db"
+      },
+      {
+        "name": "DB_USERNAME",
+        "value": "admin"
+      },
+      {
+        "name": "DB_PASSWORD",
+        "value": "VeryStrongPassword!"
+      },
+      {
+        "name": "RAILS_MASTER_KEY",
+        "value": "28799e1de9fd17b88f693f0434239f3d"
+      },
+      {
+        "name": "RAILS_LOG_TO_STDOUT",
+        "value": "ENABLED"
+      }
+    ]
+  }
+]
