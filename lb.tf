@@ -3,7 +3,7 @@ resource "aws_lb" "aisk_prd" {
   load_balancer_type         = "application"
   internal                   = false
   idle_timeout               = 60
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   subnets = [
     aws_subnet.public_0.id,
@@ -53,7 +53,7 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn=aws_lb.aisk_prd.arn
   port="443"
   protocol="HTTPS"
-  certificate_arn=aws_acm_certificate.aisk.arn
+  certificate_arn= aws_acm_certificate_validation.aisk.certificate_arn
   ssl_policy="ELBSecurityPolicy-2016-08"
 
   default_action {
@@ -128,4 +128,5 @@ resource "aws_lb_listener_rule" "aisk-prd-lb-listener-rule" {
       values = ["/*"]
     }
   }
+  depends_on = [aws_lb_target_group.aisk-prd-app-ecs-group]
 }

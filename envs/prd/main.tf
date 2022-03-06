@@ -7,6 +7,9 @@ terraform {
       name = "aisknet_workspace"
     }
   }
+  required_providers {
+    aws      = "4.4.0"
+  }
 }
 
 provider "aws" {

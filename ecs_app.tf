@@ -46,6 +46,7 @@ resource "aws_ecs_service" "aisk-prd-app" {
   lifecycle {
     ignore_changes = [task_definition]
   }
+  depends_on = [aws_lb_listener_rule.aisk-prd-lb-listener-rule]
 }
 
 //ECRの設定

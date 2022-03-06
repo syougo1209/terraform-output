@@ -43,7 +43,7 @@ resource "aws_db_instance" "aisk-db" {
   maintenance_window         = "mon:10:10-mon:10:40"
   auto_minor_version_upgrade = false
   deletion_protection        = false
-  skip_final_snapshot        = false
+  skip_final_snapshot        = true
   port                       = 3306
   apply_immediately          = false
   vpc_security_group_ids     = [module.mysql_sg.security_group_id]
